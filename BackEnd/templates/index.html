@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telegram Auth</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Авторизация через Telegram</h1>
+        
+        <div id="auth-section">
+            <p>Нажмите кнопку ниже для входа через Telegram бота</p>
+            <button onclick="startTelegramAuth()" id="auth-btn">Войти через Telegram</button>
+        </div>
+        
+        <div id="status"></div>
+        <div id="user-info" style="display: none;"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
