@@ -1,3 +1,631 @@
-body{
-    font-family: Arial, Helvetica, sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* ВСЕ ОСТАЛЬНЫЕ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ как в вашем коде */
+body {
+    background: #E0E1E1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 20px;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 1920px;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Анимация появления карты */
+.auth-card {
+    text-align: center;
+    display: flex;
+    width: 100%;
+    max-width: 1251px;
+    min-height: 510px;
+    height: auto;
+    box-shadow: 0px 4px 27.7px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: cardReveal 0.8s ease-out forwards;
+}
+
+@keyframes cardReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Анимация появления секций */
+.welcome-section {
+    flex: 1;
+    background: linear-gradient(103.4deg, #FFDD2D 8.97%, #FFBB00 87.31%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 30px;
+    text-align: center;
+    min-height: 300px;
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: slideInLeft 0.6s ease-out 0.3s forwards;
+}
+
+.login-section {
+    flex: 1;
+    background: #EDEDED;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 30px;
+    min-height: 300px;
+    opacity: 0;
+    transform: translateX(50px);
+    animation: slideInRight 0.6s ease-out 0.3s forwards;
+}
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.welcome-section h1 {
+    font-weight: 900;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.2;
+    color: #EDEDED;
+    margin-bottom: 20px;
+}
+
+.login-section h2 {
+    font-weight: 900;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.2;
+    color: #3E3E3F;
+    margin-bottom: 40px;
+}
+
+/* ИСПРАВЛЕННАЯ СТРУКТУРА КНОПКИ TELEGRAM */
+.telegram-btn {
+    width: min(100%, 369px);
+    height: 71px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.telegram-btn-inner {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(181.62deg, #29A9EB -141.26%, #2595CA 192.26%);
+    border-radius: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(41, 169, 235, 0.3);
+    padding: 0 clamp(15px, 4vw, 25px);
+    gap: clamp(8px, 2vw, 12px);
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ПЛАВНОЕ ЗАТМЕНЕНИЕ ВСЕЙ КНОПКИ TELEGRAM ПРИ НАВЕДЕНИИ */
+.telegram-btn:hover .telegram-btn-inner {
+    background: linear-gradient(181.62deg, #1E8BC3 -141.26%, #1E7AA8 192.26%);
+    box-shadow: 0 6px 25px rgba(41, 169, 235, 0.5);
+    transform: translateY(-1px);
+}
+
+.telegram-btn-text {
+    font-weight: 900;
+    font-size: clamp(16px, 2.5vw, 20px);
+    line-height: 1.2;
+    color: #FFFFFF;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.telegram-icon {
+    width: clamp(28px, 4vw, 40px);
+    height: clamp(28px, 4vw, 40px);
+    object-fit: contain;
+    flex-shrink: 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ПЛАВНЫЕ АНИМАЦИИ ДЛЯ ИКОНКИ И ТЕКСТА TELEGRAM */
+.telegram-btn:hover .telegram-icon {
+    transform: scale(1.1) rotate(5deg);
+    filter: brightness(1.1);
+}
+
+.telegram-btn:hover .telegram-btn-text {
+    color: #f8f9fa;
+    letter-spacing: 0.5px;
+}
+
+.register-link {
+    font-weight: 900;
+    font-size: clamp(12px, 1.5vw, 14px);
+    line-height: 1.2;
+    color: #898989;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.register-link a {
+    color: #29A9EB;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.register-link a:hover {
+    color: #1E8BC3;
+    text-decoration: underline;
+    background-color: rgba(41, 169, 235, 0.1);
+    transform: translateY(-1px);
+}
+
+.logo {
+    position: absolute;
+    width: min(151px, 12vw);
+    height: min(54px, 8vw);
+    left: max(20px, 3vw);
+    top: max(20px, 3vw);
+    background: #3E3E3F;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: clamp(14px, 2vw, 18px);
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 0.8s forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.status-message {
+    margin: 20px 0;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: 500;
+    width: min(100%, 369px);
+    box-sizing: border-box;
+    font-size: clamp(14px, 1.8vw, 16px);
+    transition: all 0.3s ease;
+}
+
+.status-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.user-info {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    text-align: center;
+    width: min(100%, 369px);
+    border: 1px solid #dee2e6;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.user-info img {
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 3px solid #29A9EB;
+    max-width: 100%;
+    height: auto;
+    transition: all 0.3s ease;
+}
+
+.user-info h3 {
+    color: #3E3E3F;
+    margin-bottom: 5px;
+    font-size: clamp(16px, 2vw, 18px);
+}
+
+.user-info p {
+    color: #6c757d;
+    margin-bottom: 5px;
+    font-size: clamp(14px, 1.8vw, 16px);
+}
+
+/* Модальное окно */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 30px;
+    border-radius: 5px;
+    width: min(95%, 400px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    box-sizing: border-box;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #3E3E3F;
+    font-size: clamp(20px, 3vw, 24px);
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: clamp(14px, 2vw, 16px);
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.modal-content input:focus {
+    border-color: #29A9EB;
+    box-shadow: 0 0 0 2px rgba(41, 169, 235, 0.2);
+    transform: translateY(-1px);
+}
+
+.modal-content button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(103.4deg, #FFDD2D 8.97%, #FFBB00 87.31%);
+    border: none;
+    border-radius: 5px;
+    color: #3E3E3F;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: clamp(14px, 2vw, 16px);
+    box-sizing: border-box;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.modal-content button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 187, 0, 0.3);
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: bold;
+    cursor: pointer;
+    color: #aaa;
+    transition: all 0.3s ease;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.close:hover {
+    color: #000;
+    background-color: rgba(0,0,0,0.1);
+    transform: rotate(90deg);
+}
+
+/* Плавная адаптивность для планшетов */
+@media (max-width: 900px) {
+    .auth-card {
+        flex-direction: column;
+        height: auto;
+        max-width: min(95%, 600px);
+        margin: 20px 0;
+        transition: all 0.4s ease;
+    }
+    
+    .welcome-section, .login-section {
+        width: 100%;
+        min-height: min(40vh, 250px);
+        padding: clamp(20px, 4vw, 30px) clamp(15px, 3vw, 20px);
+        transition: all 0.4s ease;
+    }
+    
+    /* Анимации для мобильной версии */
+    .welcome-section {
+        transform: translateY(-30px);
+        animation: slideInTop 0.6s ease-out 0.3s forwards;
+    }
+    
+    .login-section {
+        transform: translateY(30px);
+        animation: slideInBottom 0.6s ease-out 0.3s forwards;
+    }
+    
+    @keyframes slideInTop {
+        0% {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInBottom {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .logo {
+        position: relative;
+        left: 0;
+        top: 0;
+        margin-bottom: 20px;
+        align-self: flex-start;
+        transition: all 0.4s ease;
+    }
+}
+
+
+/* Плавная адаптивность для мобильных */
+@media (max-width: 500px) {
+    body {
+        padding: clamp(10px, 3vw, 15px);
+        align-items: center;
+    }
+    
+    .container {
+        min-height: auto;
+        align-items: center;
+    }
+    
+    .auth-card {
+        border-radius: 10px;
+        min-height: auto;
+        margin: 10px 0;
+        transition: all 0.4s ease;
+    }
+    
+    .welcome-section, .login-section {
+        min-height: min(35vh, 200px);
+        padding: clamp(15px, 4vw, 25px) clamp(12px, 3vw, 20px);
+        transition: all 0.4s ease;
+    }
+    
+    .register-link {
+        margin-top: clamp(20px, 5vw, 30px);
+    }
+    
+    /* Улучшенная адаптивность для кнопки Telegram */
+    .telegram-btn-inner {
+        height: 55px;
+        padding: 0 18px;
+    }
+    
+    .telegram-btn-text {
+        font-size: 17px;
+    }
+    
+    .telegram-icon {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* Плавная адаптивность для очень маленьких экранов */
+@media (max-width: 360px) {
+    .welcome-section, .login-section {
+        padding: clamp(12px, 3vw, 20px) clamp(10px, 2.5vw, 15px);
+        min-height: min(30vh, 180px);
+    }
+    
+    .register-link {
+        margin-top: clamp(15px, 4vw, 25px);
+    }
+    
+    /* Дополнительные улучшения для маленьких экранов */
+    .telegram-btn-inner {
+        height: 50px;
+        padding: 0 15px;
+    }
+    
+    .telegram-btn-text {
+        font-size: 15px;
+    }
+    
+    .telegram-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* КРИТИЧЕСКИ МАЛЕНЬКИЕ ЭКРАНЫ */
+@media (max-width: 320px) {
+    .welcome-section, .login-section {
+        padding: clamp(10px, 2.5vw, 15px) clamp(8px, 2vw, 12px);
+        min-height: min(25vh, 160px);
+    }
+    
+    .telegram-btn-text {
+        white-space: normal;
+        line-height: 1.2;
+        text-align: center;
+        font-size: 14px;
+    }
+    
+    .register-link {
+        margin-top: clamp(10px, 3vw, 20px);
+    }
+    
+    .telegram-btn-inner {
+        height: 48px;
+        padding: 0 12px;
+        gap: 6px;
+    }
+    
+    .telegram-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Плавная адаптивность по высоте */
+@media (max-height: 700px) {
+    body {
+        align-items: flex-start;
+        padding-top: clamp(15px, 3vw, 20px);
+        padding-bottom: clamp(15px, 3vw, 20px);
+    }
+    
+    .auth-card {
+        min-height: auto;
+        margin: 10px 0;
+    }
+    
+    .welcome-section, .login-section {
+        min-height: min(35vh, 200px);
+        padding: clamp(15px, 3vw, 25px) clamp(12px, 2.5vw, 20px);
+    }
+    
+    .register-link {
+        margin-top: clamp(15px, 4vw, 25px);
+    }
+}
+
+@media (max-height: 500px) {
+    .welcome-section, .login-section {
+        min-height: min(25vh, 150px);
+        padding: clamp(10px, 2.5vw, 15px) clamp(10px, 2vw, 20px);
+    }
+    
+    .register-link {
+        margin-top: clamp(10px, 3vw, 15px);
+    }
+}
+
+/* Ландшафтная ориентация на мобильных */
+@media (max-height: 500px) and (orientation: landscape) {
+    body {
+        padding: 10px;
+        align-items: flex-start;
+    }
+    
+    .auth-card {
+        flex-direction: row;
+        max-height: 90vh;
+        margin: 5px 0;
+    }
+    
+    .welcome-section, .login-section {
+        min-height: auto;
+        padding: 15px;
+        justify-content: center;
+    }
 }

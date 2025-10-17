@@ -1,12 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel = "stylesheet" href = "style.css">
+    <title>Telegram Auth + Мое приложение</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <script src = "index.js"></script>
+    <div class="container">
+        
+        <div class="auth-card">
+            <!-- Левая секция с приветствием -->
+            <div class="welcome-section">
+                <h1>Добро пожаловать</h1>
+            </div>
+            
+            <!-- Правая секция с формой входа -->
+            <div class="login-section">
+                <h2>Вход</h2>
+                
+                <div id="auth-section">
+                    <button onclick="startTelegramAuth()" class="telegram-btn">
+                        <div class="telegram-btn-inner">
+                            <img src="assets/tg_icon.png" alt="Telegram" class="telegram-icon">
+                            <span class="telegram-btn-text">Войти через Telegram</span>
+                        </div>
+                    </button>
+                </div>
+                
+                <div id="status" class="status-message"></div>
+                
+                <div id="user-info" class="user-info" style="display: none;"></div>
+                
+                <div class="register-link">
+                    Еще нет аккаунта? <a href="#" onclick="showRegistration()">Зарегистрируйтесь</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно регистрации -->
+    <div id="registration-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeRegistration()">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="registration-form">
+                <input type="text" placeholder="Имя" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
