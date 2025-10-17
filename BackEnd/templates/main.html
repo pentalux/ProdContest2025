@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="user-header" onclick="openProfile()">
+                <div class="user-icon">👤</div>
+                <span class="user-title">Данные пользователя</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="navigation-buttons">
+                <button class="nav-btn prev-btn">‹</button>
+                <button class="nav-btn next-btn">›</button>
+            </div>
+            
+            <div class="content-area">
+                <h2>Добро пожаловать, <span id="user-first-name">{{ user.first_name }}</span>!</h2>
+                
+                <div class="subscription-card {{ user.subscription.level|lower }}" id="subscription-card">
+                    <div class="subscription-header">
+                        <h3 id="subscription-name">{{ user.subscription.name }} {{ user.subscription.level }}</h3>
+                        <span class="subscription-badge" id="subscription-level">{{ user.subscription.level }}</span>
+                    </div>
+                    <div class="subscription-info">
+                        <p><strong>Описание:</strong> <span id="subscription-description">{{ user.subscription.description }}</span></p>
+                        <div class="balance-info">
+                            <strong>Баланс на сайте: <span id="site-balance">{{ user.site_balance }}</span> руб.</strong>
+                        </div>
+                        <div class="balance-info">
+                            <strong>Баланс пользователя: <span id="user-balance">{{ user.user_balance }}</span> руб.</strong>
+                        </div>
+                        {% if user.subscription.id > 0 %}
+                        <div class="next-subscription">
+                            Следующая подписка: <span id="next-level">{{ user.subscription.next_level }}</span> - <span id="next-balance">{{ user.subscription.next_min_balance }}</span> руб.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="update-info">
+                    <small>🔄 Данные обновляются автоматически каждые 30 секунд</small>
+                </div>
+                
+                <p>Используйте кнопки навигации для перемещения по приложению</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const userId = "{{ user.unique_id }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

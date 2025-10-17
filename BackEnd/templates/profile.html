@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Профиль пользователя</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="user-header" onclick="goBack()">
+                <div class="user-icon">←</div>
+                <span class="user-title">Назад</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="profile-content">
+                <h2>👤 Данные пользователя</h2>
+                
+                <div class="subscription-card {{ user.subscription.level|lower }}" id="subscription-card">
+                    <div class="subscription-header">
+                        <h3>Текущая подписка</h3>
+                        <span class="subscription-badge" id="subscription-level">{{ user.subscription.level }}</span>
+                    </div>
+                    <div class="subscription-info">
+                        <p><strong id="subscription-name">{{ user.subscription.name }} {{ user.subscription.level }}</strong></p>
+                        <p>Минимальный баланс: <span id="subscription-min-balance">{{ user.subscription.min_balance }}</span> руб.</p>
+                    </div>
+                </div>
+                
+                <div class="user-info-card">
+                    <div class="info-row">
+                        <span class="info-label">ФИО:</span>
+                        <span class="info-value" id="user-full-name">{{ user.last_name }} {{ user.first_name }} {{ user.middle_name or '' }}</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Телефон:</span>
+                        <span class="info-value" id="user-phone">{{ user.phone_number }}</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Telegram ID:</span>
+                        <span class="info-value">{{ user.telegram_id }}</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Уникальный ID:</span>
+                        <span class="info-value">{{ user.unique_id }}</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Баланс пользователя:</span>
+                        <span class="info-value balance" id="user-balance">{{ user.user_balance }} руб.</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Баланс на сайте:</span>
+                        <span class="info-value balance" id="site-balance">{{ user.site_balance }} руб.</span>
+                    </div>
+                    
+                    {% if is_admin %}
+                    <div class="info-row admin-row">
+                        <span class="info-label">Статус:</span>
+                        <span class="info-value admin-badge">👑 Администратор</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="update-info">
+                    <small>🔄 Данные обновляются автоматически каждые 30 секунд</small>
+                </div>
+                
+                {% if is_admin %}
+                <div class="admin-buttons">
+                    <button class="admin-panel-btn" onclick="openAdminPanel()">👑 Админ-панель</button>
+                    <button class="admin-panel-btn" onclick="openSubscriptionsAdmin()">⚙️ Управление подписками</button>
+                </div>
+                {% endif %}
+                
+                <button class="logout-btn" onclick="logout()">Выйти</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const userId = "{{ user.unique_id }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>

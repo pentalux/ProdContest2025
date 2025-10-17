@@ -1,25 +1,15 @@
 import requests
 import time
-import threading
 from config import Config
 
 class BotPolling:
     def __init__(self, bot_handler):
         self.bot_handler = bot_handler
         self.offset = 0
-        self.running = False
 
     def start_polling(self):
-        self.running = True
-        polling_thread = threading.Thread(target=self._polling_loop, daemon=True)
-        polling_thread.start()
         print("Bot polling started...")
-
-    def stop_polling(self):
-        self.running = False
-
-    def _polling_loop(self):
-        while self.running:
+        while True:
             try:
                 url = f'https://api.telegram.org/bot{Config.BOT_TOKEN}/getUpdates'
                 params = {

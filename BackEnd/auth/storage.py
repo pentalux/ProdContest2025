@@ -1,20 +1,22 @@
 import time
 from collections import defaultdict
 from database.db import Database
+from subscription_manager import SubscriptionManager
 
 class AuthStorage:
     def __init__(self):
         self.temp_storage = {}
-        self.user_messages = defaultdict(list)
         self.pending_contacts = {}
         self.user_data_collection = {}
         self.database = Database()
+        self.subscription_manager = SubscriptionManager()
 
     def create_session(self, auth_id):
         self.temp_storage[auth_id] = {
             'status': 'pending',
             'user_data': None,
-            'created_at': time.time()
+            'created_at': time.time(),
+            'chat_id': None
         }
         return auth_id
 
@@ -29,20 +31,29 @@ class AuthStorage:
 
     def complete_session(self, auth_id, user_data):
         if auth_id in self.temp_storage:
-            # Сохраняем пользователя в базу данных
-            unique_id = self.database.save_user(user_data)
+            existing_user = self.database.get_user_by_telegram_id(user_data['telegram_id'])
             
-            if unique_id:
-                # Получаем полные данные пользователя из БД
-                db_user = self.database.get_user_by_unique_id(unique_id)
-                user_data.update(db_user)
+            if existing_user:
+                subscription = self.subscription_manager.get_user_subscription(existing_user['site_balance'])
+                existing_user['subscription'] = subscription
                 
                 self.temp_storage[auth_id].update({
                     'status': 'completed',
-                    'user_data': user_data
+                    'user_data': existing_user
                 })
-                return True
-        
+            else:
+                unique_id = self.database.save_user(user_data)
+                
+                if unique_id:
+                    db_user = self.database.get_user_by_unique_id(unique_id)
+                    subscription = self.subscription_manager.get_user_subscription(db_user['site_balance'])
+                    db_user['subscription'] = subscription
+                    
+                    self.temp_storage[auth_id].update({
+                        'status': 'completed',
+                        'user_data': db_user
+                    })
+                    return True
         return False
 
     def delete_session(self, auth_id):
@@ -64,7 +75,7 @@ class AuthStorage:
         expired_keys = []
         
         for key, data in self.temp_storage.items():
-            if current_time - data['created_at'] > 600:  # 10 минут
+            if current_time - data['created_at'] > 600:
                 expired_keys.append(key)
         
         for key in expired_keys:
@@ -81,8 +92,14 @@ class AuthStorage:
             del self.pending_contacts[chat_id]
 
     def get_user_from_db(self, unique_id):
-        return self.database.get_user_by_unique_id(unique_id)
+        user = self.database.get_user_by_unique_id(unique_id)
+        if user:
+            subscription = self.subscription_manager.get_user_subscription(user['site_balance'])
+            user['subscription'] = subscription
+        return user
 
-    def update_user_balance(self, unique_id, user_balance=None, site_balance=None):
-        """Обновляет балансы пользователя"""
-        return self.database.update_balance(unique_id, user_balance, site_balance)
+    def get_all_users_from_db(self):
+        users = self.database.get_all_users()
+        for user in users:
+            user['subscription'] = self.subscription_manager.get_user_subscription(user.get('site_balance', 0))
+        return users

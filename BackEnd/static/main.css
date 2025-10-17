@@ -1,0 +1,237 @@
+/* Стили для админ-кнопок */
+.admin-panel-btn {
+    background-color: #28a745 !important;
+    margin-bottom: 15px;
+}
+
+.admin-panel-btn:hover {
+    background-color: #218838 !important;
+}
+
+.admin-row {
+    background-color: #fff3cd !important;
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.admin-badge {
+    color: #856404;
+    font-weight: bold;
+    background-color: #ffeaa7;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Стили для пустой админ-панели */
+.empty-admin-content {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.empty-admin-content h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.empty-admin-content p {
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.admin-action-btn {
+    background: #28a745 !important;
+}
+
+.admin-action-btn:hover {
+    background: #218838 !important;
+}
+/* Стили для подписок */
+.subscription-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #0088cc;
+}
+
+.subscription-card.bronze {
+    border-left-color: #cd7f32;
+    background: linear-gradient(135deg, #f8f9fa 0%, #fff3e0 100%);
+}
+
+.subscription-card.silver {
+    border-left-color: #c0c0c0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #f5f5f5 100%);
+}
+
+.subscription-card.gold {
+    border-left-color: #ffd700;
+    background: linear-gradient(135deg, #f8f9fa 0%, #fff9c4 100%);
+}
+
+.subscription-card.diamond {
+    border-left-color: #b9f2ff;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+}
+
+.subscription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.subscription-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.subscription-badge {
+    background: #0088cc;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.subscription-card.bronze .subscription-badge {
+    background: #cd7f32;
+}
+
+.subscription-card.silver .subscription-badge {
+    background: #c0c0c0;
+}
+
+.subscription-card.gold .subscription-badge {
+    background: #ffd700;
+    color: #333;
+}
+
+.subscription-card.diamond .subscription-badge {
+    background: #b9f2ff;
+    color: #333;
+}
+
+.subscription-info p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.balance-info {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e9ecef;
+}
+
+.next-subscription {
+    margin-top: 10px;
+    padding: 8px;
+    background: #e7f3ff;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #0066cc;
+}
+
+/* Стили для админ-кнопок */
+.admin-panel-btn {
+    background-color: #28a745 !important;
+    margin-bottom: 10px;
+}
+
+.admin-panel-btn:hover {
+    background-color: #218838 !important;
+}
+
+.admin-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.admin-row {
+    background-color: #fff3cd !important;
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.admin-badge {
+    color: #856404;
+    font-weight: bold;
+    background-color: #ffeaa7;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Стили для пустой админ-панели */
+.empty-admin-content {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.empty-admin-content h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.empty-admin-content p {
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.admin-action-btn {
+    background: #28a745 !important;
+}
+
+.admin-action-btn:hover {
+    background: #218838 !important;
+}
+
+/* Информация для админов */
+.admin-info {
+    background: #e7f3ff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #0088cc;
+}
+
+.admin-info p {
+    margin: 0;
+    color: #0066cc;
+}
+
+/* Добавляем в конец файла */
+
+.update-info {
+    text-align: center;
+    margin: 15px 0;
+    padding: 10px;
+    background: #e7f3ff;
+    border-radius: 5px;
+    border-left: 3px solid #0088cc;
+}
+
+.update-info small {
+    color: #0066cc;
+    font-size: 12px;
+}

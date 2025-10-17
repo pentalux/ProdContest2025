@@ -42,7 +42,8 @@ function checkAuthStatus() {
             
             if (data.status === 'completed') {
                 clearInterval(checkInterval);
-                showSuccess(data.user);
+                // Всех пользователей перекидываем на главную страницу
+                window.location.href = data.redirect_url;
             } else if (data.status === 'pending') {
                 showStatus('⌛ Ожидание завершения регистрации в Telegram...<br><small>Пожалуйста, введите ФИО и поделитесь номером телефона в боте</small>', 'pending');
             } else if (data.status === 'not_found') {
@@ -63,47 +64,6 @@ function showStatus(message, type) {
     statusElement.className = type;
     statusElement.style.display = 'block';
 }
-
-function showSuccess(user) {
-    document.getElementById('auth-section').style.display = 'none';
-    
-    const fullName = `${user.last_name} ${user.first_name} ${user.middle_name || ''}`.trim();
-    
-    const userInfo = `
-        <h2>✅ Авторизация успешна!</h2>
-        <div class="user-info">
-            <strong>Данные пользователя:</strong><br><br>
-            👤 <strong>ФИО:</strong> ${fullName}<br>
-            📱 <strong>Телефон:</strong> ${user.phone_number}<br>
-            🆔 <strong>Уникальный ID:</strong> ${user.unique_id}<br>
-            💰 <strong>Баланс пользователя:</strong> ${user.user_balance || 0} руб.<br>
-            💳 <strong>Баланс на сайте:</strong> ${user.site_balance || 0} руб.
-        </div>
-        <button onclick="logout()">Выйти</button>
-    `;
-    
-    document.getElementById('user-info').innerHTML = userInfo;
-    document.getElementById('user-info').style.display = 'block';
-    
-    localStorage.setItem('telegram_user', JSON.stringify(user));
-}
-
-function logout() {
-    localStorage.removeItem('telegram_user');
-    document.getElementById('user-info').style.display = 'none';
-    document.getElementById('auth-section').style.display = 'block';
-    document.getElementById('auth-btn').disabled = false;
-    document.getElementById('status').style.display = 'none';
-    authId = null;
-}
-
-window.addEventListener('load', function() {
-    const savedUser = localStorage.getItem('telegram_user');
-    if (savedUser) {
-        const user = JSON.parse(savedUser);
-        showSuccess(user);
-    }
-});
 
 window.addEventListener('beforeunload', function() {
     if (checkInterval) {
