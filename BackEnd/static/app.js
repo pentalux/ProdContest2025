@@ -44,7 +44,7 @@ function checkAuthStatus() {
                 clearInterval(checkInterval);
                 showSuccess(data.user);
             } else if (data.status === 'pending') {
-                showStatus('⌛ Ожидание подтверждения в Telegram...<br><small>Пожалуйста, поделитесь номером телефона в боте</small>', 'pending');
+                showStatus('⌛ Ожидание завершения регистрации в Telegram...<br><small>Пожалуйста, введите ФИО и поделитесь номером телефона в боте</small>', 'pending');
             } else if (data.status === 'not_found') {
                 showStatus('❌ Сессия авторизации устарела', 'error');
                 document.getElementById('auth-btn').disabled = false;
@@ -67,13 +67,17 @@ function showStatus(message, type) {
 function showSuccess(user) {
     document.getElementById('auth-section').style.display = 'none';
     
+    const fullName = `${user.last_name} ${user.first_name} ${user.middle_name || ''}`.trim();
+    
     const userInfo = `
         <h2>✅ Авторизация успешна!</h2>
         <div class="user-info">
-            <strong>Данные пользователя:</strong><br>
-            👤 Имя: ${user.first_name} ${user.last_name || ''}<br>
-            📱 Телефон: ${user.phone_number}<br>
-            🔑 Telegram ID: ${user.telegram_id}
+            <strong>Данные пользователя:</strong><br><br>
+            👤 <strong>ФИО:</strong> ${fullName}<br>
+            📱 <strong>Телефон:</strong> ${user.phone_number}<br>
+            🆔 <strong>Уникальный ID:</strong> ${user.unique_id}<br>
+            💰 <strong>Баланс пользователя:</strong> ${user.user_balance || 0} руб.<br>
+            💳 <strong>Баланс на сайте:</strong> ${user.site_balance || 0} руб.
         </div>
         <button onclick="logout()">Выйти</button>
     `;

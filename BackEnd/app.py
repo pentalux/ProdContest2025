@@ -3,12 +3,11 @@ import secrets
 from auth.storage import AuthStorage
 from bot.handlers import BotHandler
 from bot.polling import BotPolling
-from config import Config
 
 app = Flask(__name__)
-app.secret_key = Config.SECRET_KEY
+app.secret_key = '567845675'
 
-# Инициализация компонентов
+
 auth_storage = AuthStorage()
 bot_handler = BotHandler(auth_storage)
 bot_polling = BotPolling(bot_handler)
@@ -24,7 +23,7 @@ def init_auth():
     auth_id = secrets.token_hex(16)
     auth_storage.create_session(auth_id)
     
-    bot_url = f'https://t.me/{Config.BOT_USERNAME}?start={auth_id}'
+    bot_url = f'https://t.me/private239bot?start={auth_id}'
     
     return jsonify({
         'auth_id': auth_id,
@@ -44,6 +43,8 @@ def check_auth(auth_id):
         return jsonify({'status': 'completed', 'user': user_data})
     
     return jsonify({'status': session['status']})
+
+# Убраны роуты для админки и API пользователей
 
 if __name__ == '__main__':
     # Запускаем polling при старте приложения
