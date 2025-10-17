@@ -2,11 +2,10 @@
 <html>
 <head>
     <title>Профиль пользователя</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
     <div class="container">
-        <!-- Шапка -->
         <header class="header">
             <div class="user-header" onclick="goBack()">
                 <div class="user-icon">←</div>
@@ -14,12 +13,10 @@
             </div>
         </header>
 
-        <!-- Основной контент профиля -->
         <main class="main-content">
             <div class="profile-content">
                 <h2>👤 Данные пользователя</h2>
                 
-                <!-- Карточка подписки -->
                 <div class="subscription-card {{ user.subscription.level|lower }}" id="subscription-card">
                     <div class="subscription-header">
                         <h3>Текущая подписка</h3>
@@ -74,7 +71,6 @@
                     <small>🔄 Данные обновляются автоматически каждые 30 секунд</small>
                 </div>
                 
-                <!-- Кнопка для админов -->
                 {% if is_admin %}
                 <div class="admin-buttons">
                     <button class="admin-panel-btn" onclick="openAdminPanel()">👑 Админ-панель</button>
@@ -89,61 +85,7 @@
 
     <script>
         const userId = "{{ user.unique_id }}";
-        
-        function goBack() {
-            window.location.href = "/main?user_id=" + userId;
-        }
-
-        function openAdminPanel() {
-            window.location.href = "/admin?user_id=" + userId;
-        }
-
-        function openSubscriptionsAdmin() {
-            window.location.href = "/admin-subscriptions?user_id=" + userId;
-        }
-
-        function logout() {
-            if (confirm('Вы уверены, что хотите выйти?')) {
-                window.location.href = "/";
-            }
-        }
-
-        // Функция для обновления данных пользователя
-        async function updateUserData() {
-            try {
-                const response = await fetch('/check-user-data?user_id=' + userId);
-                const data = await response.json();
-                
-                if (data.success) {
-                    const user = data.user;
-                    
-                    // Обновляем данные на странице
-                    document.getElementById('user-full-name').textContent = user.last_name + ' ' + user.first_name + ' ' + (user.middle_name || '');
-                    document.getElementById('user-phone').textContent = user.phone_number;
-                    document.getElementById('user-balance').textContent = user.user_balance + ' руб.';
-                    document.getElementById('site-balance').textContent = user.site_balance + ' руб.';
-                    document.getElementById('subscription-name').textContent = user.subscription.name + ' ' + user.subscription.level;
-                    document.getElementById('subscription-level').textContent = user.subscription.level;
-                    document.getElementById('subscription-min-balance').textContent = user.subscription.min_balance;
-                    
-                    // Обновляем класс подписки для стилей
-                    const subscriptionCard = document.getElementById('subscription-card');
-                    subscriptionCard.className = 'subscription-card ' + user.subscription.level.toLowerCase();
-                    
-                    console.log('Данные профиля обновлены:', new Date().toLocaleTimeString());
-                }
-            } catch (error) {
-                console.error('Ошибка при обновлении данных:', error);
-            }
-        }
-
-        // Обновляем данные каждые 30 секунд
-        setInterval(updateUserData, 30000);
-        
-        // Также обновляем при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            updateUserData();
-        });
     </script>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 </body>
 </html>

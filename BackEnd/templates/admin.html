@@ -2,95 +2,11 @@
 <html>
 <head>
     <title>Админ-панель</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-    <style>
-        .admin-container {
-            max-width: 1000px;
-        }
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 14px;
-        }
-        .users-table th, .users-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        .users-table th {
-            background-color: #0088cc;
-            color: white;
-            position: sticky;
-            top: 0;
-        }
-        .users-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .users-table tr:hover {
-            background-color: #f5f5f5;
-        }
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .stats {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        .edit-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 12px;
-        }
-        .edit-btn:hover {
-            background: #218838;
-        }
-        .admin-actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .admin-action-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .admin-action-btn:hover {
-            background: #545b62;
-        }
-        .subscription-badge {
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        .bronze { background: #cd7f32; color: white; }
-        .silver { background: #c0c0c0; color: black; }
-        .gold { background: #ffd700; color: black; }
-        .diamond { background: #b9f2ff; color: black; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
 <body>
     <div class="container admin-container">
-        <!-- Шапка -->
         <header class="header">
             <div class="user-header" onclick="goToProfile()">
                 <div class="user-icon">←</div>
@@ -98,7 +14,6 @@
             </div>
         </header>
 
-        <!-- Основной контент админ-панели -->
         <main class="main-content">
             <div class="admin-header">
                 <h2>👑 Админ-панель</h2>
@@ -165,17 +80,8 @@
     </div>
 
     <script>
-        function goToProfile() {
-            window.location.href = "{{ url_for('profile', user_id=user.unique_id) }}";
-        }
-
-        function openSubscriptionsAdmin() {
-            window.location.href = "{{ url_for('admin_subscriptions', user_id=user.unique_id) }}";
-        }
-
-        function editUser(userUniqueId) {
-            window.location.href = "{{ url_for('admin_edit_user', user_unique_id='') }}" + userUniqueId + "?user_id={{ user.unique_id }}";
-        }
+        const userId = "{{ user.unique_id }}";
     </script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 </body>
 </html>

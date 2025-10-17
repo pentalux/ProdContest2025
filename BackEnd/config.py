@@ -30,8 +30,8 @@ class Config:
                 "subscriptions": [
                     {
                         "id": 0,
-                        "name": "Без подписки",
-                        "level": "None",
+                        "name": "Pro",
+                        "level": "Black",
                         "min_balance": 0,
                         "description": "Базовая подписка с минимальными возможностями",
                         "features": [
@@ -42,7 +42,7 @@ class Config:
                     },
                     {
                         "id": 1,
-                        "name": "Pro",
+                        "name": "Premium",
                         "level": "Bronze",
                         "min_balance": 1000,
                         "description": "Бронзовая подписка Pro с расширенными возможностями",
@@ -55,7 +55,7 @@ class Config:
                     },
                     {
                         "id": 2,
-                        "name": "Pro",
+                        "name": "Premium",
                         "level": "Silver", 
                         "min_balance": 5000,
                         "description": "Серебряная подписка Pro с премиум функциями",
