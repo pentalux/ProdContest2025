@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Управление подписками</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        .subscriptions-container {
+            max-width: 800px;
+        }
+        .subscription-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0088cc;
+        }
+        .subscription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .subscription-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .subscription-level {
+            background: #0088cc;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .subscription-form {
+            margin-top: 15px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .subscription-features {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e7f3ff;
+            border-radius: 5px;
+        }
+        .subscription-features h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #0066cc;
+        }
+        .subscription-features ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .subscription-features li {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .update-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .update-btn:hover {
+            background: #218838;
+        }
+        .admin-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container subscriptions-container">
+        <!-- Шапка -->
+        <header class="header">
+            <div class="user-header" onclick="goBack()">
+                <div class="user-icon">←</div>
+                <span class="user-title">Назад</span>
+            </div>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <h2>⚙️ Управление подписками</h2>
+            
+            <div class="admin-info">
+                <p>Здесь вы можете изменить минимальный баланс и описание для каждой подписки.</p>
+            </div>
+
+            {% for subscription in subscriptions %}
+            <div class="subscription-item">
+                <div class="subscription-header">
+                    <div class="subscription-name">{{ subscription.name }} {{ subscription.level }}</div>
+                    <div class="subscription-level">{{ subscription.level }}</div>
+                </div>
+                
+                <form class="subscription-form" onsubmit="updateSubscription(event, {{ subscription.id }})">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="min_balance_{{ subscription.id }}">Минимальный баланс (руб.):</label>
+                            <input type="number" 
+                                   id="min_balance_{{ subscription.id }}"
+                                   name="min_balance" 
+                                   value="{{ subscription.min_balance }}" 
+                                   min="0" 
+                                   required
+                                   placeholder="Минимальный баланс">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description_{{ subscription.id }}">Описание подписки:</label>
+                        <textarea id="description_{{ subscription.id }}"
+                                  name="description" 
+                                  required
+                                  placeholder="Описание подписки">{{ subscription.description }}</textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="update-btn">💾 Обновить баланс и описание</button>
+                        <button type="button" class="update-btn" onclick="updateDescriptionOnly({{ subscription.id }})">
+                            📝 Обновить только описание
+                        </button>
+                    </div>
+                </form>
+                
+                {% if subscription.features %}
+                <div class="subscription-features">
+                    <h4>📋 Возможности подписки:</h4>
+                    <ul>
+                        {% for feature in subscription.features %}
+                        <li>{{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="admin-actions">
+                <button class="logout-btn" onclick="goToProfile()">👤 Вернуться в профиль</button>
+                <button class="logout-btn" onclick="goToAdmin()">👑 Админ-панель</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = "{{ url_for('profile', user_id=user.unique_id) }}";
+        }
+
+        function goToProfile() {
+            window.location.href = "{{ url_for('profile', user_id=user.unique_id) }}";
+        }
+
+        function goToAdmin() {
+            window.location.href = "{{ url_for('admin_panel', user_id=user.unique_id) }}";
+        }
+
+        function updateSubscription(event, subscriptionId) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const minBalance = form.min_balance.value;
+            const description = form.description.value;
+            const userId = "{{ user.unique_id }}";
+            
+            const formData = new FormData();
+            formData.append('user_id', userId);
+            formData.append('subscription_id', subscriptionId);
+            formData.append('min_balance', minBalance);
+            formData.append('description', description);
+            
+            fetch('/update-subscription', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Подписка успешно обновлена!');
+                } else {
+                    alert('❌ Ошибка при обновлении подписки: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Ошибка при обновлении подписки');
+            });
+        }
+
+        function updateDescriptionOnly(subscriptionId) {
+            const description = document.getElementById('description_' + subscriptionId).value;
+            const userId = "{{ user.unique_id }}";
+            
+            if (!description.trim()) {
+                alert('❌ Описание не может быть пустым');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('user_id', userId);
+            formData.append('subscription_id', subscriptionId);
+            formData.append('description', description);
+            
+            fetch('/update-subscription-description', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Описание подписки успешно обновлено!');
+                } else {
+                    alert('❌ Ошибка при обновлении описания: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Ошибка при обновлении описания');
+            });
+        }
+    </script>
+</body>
+</html>

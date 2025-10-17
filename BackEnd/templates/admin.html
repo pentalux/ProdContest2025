@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin - Users Database</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <style>
         .admin-container {
             max-width: 1000px;
@@ -11,14 +11,16 @@
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            font-size: 14px;
         }
         .users-table th, .users-table td {
             border: 1px solid #ddd;
-            padding: 12px;
+            padding: 8px;
             text-align: left;
         }
         .users-table th {
-            background-color: #f2f2f2;
+            background-color: #0088cc;
+            color: white;
             position: sticky;
             top: 0;
         }
@@ -28,58 +30,152 @@
         .users-table tr:hover {
             background-color: #f5f5f5;
         }
-        .back-btn {
-            background-color: #6c757d;
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
         }
-        .back-btn:hover {
-            background-color: #545b62;
+        .stats {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .edit-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .edit-btn:hover {
+            background: #218838;
+        }
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .admin-action-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .admin-action-btn:hover {
+            background: #545b62;
+        }
+        .subscription-badge {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .bronze { background: #cd7f32; color: white; }
+        .silver { background: #c0c0c0; color: black; }
+        .gold { background: #ffd700; color: black; }
+        .diamond { background: #b9f2ff; color: black; }
     </style>
 </head>
 <body>
     <div class="container admin-container">
-        <h1>👥 База данных пользователей</h1>
-        
-        <button class="back-btn" onclick="window.location.href='/'">← Назад к авторизации</button>
-        
-        <div class="user-info">
-            <strong>Статистика:</strong>
-            <div>Всего пользователей: {{ users|length }}</div>
-        </div>
+        <!-- Шапка -->
+        <header class="header">
+            <div class="user-header" onclick="goToProfile()">
+                <div class="user-icon">←</div>
+                <span class="user-title">Назад в профиль</span>
+            </div>
+        </header>
 
-        {% if users %}
-        <table class="users-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Уникальный ID</th>
-                    <th>ФИО</th>
-                    <th>Телефон</th>
-                    <th>Telegram ID</th>
-                    <th>Username</th>
-                    <th>Дата регистрации</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td><code>{{ user.unique_id }}</code></td>
-                    <td>{{ user.last_name }} {{ user.first_name }} {{ user.middle_name or '' }}</td>
-                    <td>{{ user.phone_number }}</td>
-                    <td>{{ user.telegram_id }}</td>
-                    <td>@{{ user.username or '—' }}</td>
-                    <td>{{ user.created_at }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <div class="user-info">
-            <p>Пользователей пока нет</p>
-        </div>
-        {% endif %}
+        <!-- Основной контент админ-панели -->
+        <main class="main-content">
+            <div class="admin-header">
+                <h2>👑 Админ-панель</h2>
+                <span class="user-info">Администратор: {{ user.first_name }} {{ user.last_name }}</span>
+            </div>
+
+            <div class="admin-actions">
+                <button class="admin-action-btn" onclick="openSubscriptionsAdmin()">⚙️ Управление подписками</button>
+                <button class="admin-action-btn" onclick="goToProfile()">👤 Мой профиль</button>
+            </div>
+
+            <div class="stats">
+                <strong>Статистика:</strong>
+                <div>Всего пользователей: {{ users|length }}</div>
+                <div>Общий баланс пользователей: {{ users|sum(attribute='user_balance') }} руб.</div>
+                <div>Общий баланс на сайте: {{ users|sum(attribute='site_balance') }} руб.</div>
+            </div>
+
+            {% if users %}
+            <div style="overflow-x: auto;">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ФИО</th>
+                            <th>Телефон</th>
+                            <th>Telegram ID</th>
+                            <th>Подписка</th>
+                            <th>Баланс пользователя</th>
+                            <th>Баланс на сайте</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_item in users %}
+                        <tr>
+                            <td>{{ user_item.unique_id }}</td>
+                            <td>{{ user_item.last_name }} {{ user_item.first_name }} {{ user_item.middle_name or '' }}</td>
+                            <td>{{ user_item.phone_number }}</td>
+                            <td>{{ user_item.telegram_id }}</td>
+                            <td>
+                                <span class="subscription-badge {{ user_item.subscription.level|lower }}">
+                                    {{ user_item.subscription.level }}
+                                </span>
+                            </td>
+                            <td>{{ user_item.user_balance }} руб.</td>
+                            <td>{{ user_item.site_balance }} руб.</td>
+                            <td>
+                                <button class="edit-btn" onclick="editUser('{{ user_item.unique_id }}')">
+                                    ✏️ Редактировать
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="user-info-card">
+                <p>Пользователей пока нет</p>
+            </div>
+            {% endif %}
+        </main>
     </div>
+
+    <script>
+        function goToProfile() {
+            window.location.href = "{{ url_for('profile', user_id=user.unique_id) }}";
+        }
+
+        function openSubscriptionsAdmin() {
+            window.location.href = "{{ url_for('admin_subscriptions', user_id=user.unique_id) }}";
+        }
+
+        function editUser(userUniqueId) {
+            window.location.href = "{{ url_for('admin_edit_user', user_unique_id='') }}" + userUniqueId + "?user_id={{ user.unique_id }}";
+        }
+    </script>
 </body>
 </html>

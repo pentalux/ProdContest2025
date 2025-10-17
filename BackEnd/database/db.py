@@ -88,7 +88,7 @@ class Database:
             conn.close()
             return unique_id
         except Exception as e:
-            print(f"Ошибка при сохранении пользователя: {e}")
+            print(f"Error saving user: {e}")
             conn.close()
             return None
 
@@ -156,3 +156,46 @@ class Database:
             conn.commit()
         
         conn.close()
+
+    def update_user_data(self, unique_id, first_name, last_name, middle_name, phone_number, user_balance, site_balance):
+        """Обновляет все данные пользователя"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        try:
+            cursor.execute('''
+            UPDATE users 
+            SET first_name = ?, last_name = ?, middle_name = ?, phone_number = ?, user_balance = ?, site_balance = ?
+            WHERE unique_id = ?
+            ''', (first_name, last_name, middle_name, phone_number, user_balance, site_balance, unique_id))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error updating user data: {e}")
+            conn.close()
+            return False
+
+    def get_all_users(self):
+        """Получает всех пользователей"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('SELECT * FROM users ORDER BY site_balance DESC')
+        results = cursor.fetchall()
+        
+        conn.close()
+        return [self._row_to_dict(row) for row in results]
+
+    def delete_user(self, unique_id):
+        """Удаляет пользователя по unique_id"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('DELETE FROM users WHERE unique_id = ?', (unique_id,))
+        conn.commit()
+        deleted = cursor.rowcount > 0
+        
+        conn.close()
+        return deleted

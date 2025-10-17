@@ -1,7 +1,7 @@
 import requests
 import time
 import threading
-from config import Config
+from config import Config  # Добавьте этот импорт
 
 class BotPolling:
     def __init__(self, bot_handler):
@@ -21,7 +21,7 @@ class BotPolling:
     def _polling_loop(self):
         while self.running:
             try:
-                url = f'https://api.telegram.org/bot{Config.BOT_TOKEN}/getUpdates'
+                url = f'https://api.telegram.org/bot{Config.BOT_TOKEN}/getUpdates'  # Используем Config
                 params = {
                     'offset': self.offset,
                     'timeout': 30,

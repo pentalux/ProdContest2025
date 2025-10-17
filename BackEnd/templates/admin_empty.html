@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        .empty-admin-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .empty-admin-content h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .empty-admin-content p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .admin-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .admin-action-btn {
+            background: #28a745;
+        }
+        .admin-action-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <header class="header">
+            <div class="user-header" onclick="goBack()">
+                <div class="user-icon">←</div>
+                <span class="user-title">Назад</span>
+            </div>
+        </header>
+
+        <!-- Пустая админ-панель -->
+        <main class="main-content">
+            <div class="empty-admin-content">
+                <h2>👑 Админ-панель</h2>
+                <p>Это пустая страница админ-панели.</p>
+                <p>Здесь можно добавить функционал для управления пользователями, настройками системы и другими административными задачами.</p>
+                
+                <div class="admin-actions">
+                    <button class="admin-action-btn" onclick="goToFullAdmin()">📊 Полная админ-панель</button>
+                    <button class="logout-btn" onclick="goToProfile()">👤 Вернуться в профиль</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = "{{ url_for('profile', user_id=user.unique_id) }}";
+        }
+
+        function goToFullAdmin() {
+            window.location.href = "{{ url_for('admin_panel', user_id=user.unique_id) }}";
+        }
+
+        function goToProfile() {
+            window.location.href = "{{ url_for('profile', user_id=user.unique_id) }}";
+        }
+    </script>
+</body>
+</html>

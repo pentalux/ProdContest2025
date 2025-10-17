@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактирование пользователя</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        .edit-user-container {
+            max-width: 600px;
+        }
+        .user-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .subscription-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0088cc;
+        }
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .save-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .save-btn:hover {
+            background: #218838;
+        }
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .cancel-btn:hover {
+            background: #545b62;
+        }
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .nav-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .nav-btn:hover {
+            background: #545b62;
+        }
+    </style>
+</head>
+<body>
+    <div class="container edit-user-container">
+        <!-- Шапка -->
+        <header class="header">
+            <div class="user-header" onclick="goToProfile()">
+                <div class="user-icon">←</div>
+                <span class="user-title">Назад в профиль</span>
+            </div>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <h2>✏️ Редактирование пользователя</h2>
+            
+            <div class="admin-nav">
+                <button class="nav-btn" onclick="goToFullAdmin()">📊 Все пользователи</button>
+                <button class="nav-btn" onclick="openSubscriptionsAdmin()">⚙️ Подписки</button>
+            </div>
+            
+            <div class="subscription-info">
+                <strong>Текущая подписка:</strong> {{ user.subscription.name }} {{ user.subscription.level }}
+                <br>
+                <strong>Минимальный баланс для подписки:</strong> {{ user.subscription.min_balance }} руб.
+            </div>
+
+            <form id="userForm" class="user-form">
+                <input type="hidden" name="admin_user_id" value="{{ admin_user.unique_id }}">
+                <input type="hidden" name="user_unique_id" value="{{ user.unique_id }}">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="last_name">Фамилия:</label>
+                        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="first_name">Имя:</label>
+                        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="middle_name">Отчество:</label>
+                    <input type="text" id="middle_name" name="middle_name" value="{{ user.middle_name or '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone_number">Телефон:</label>
+                    <input type="tel" id="phone_number" name="phone_number" value="{{ user.phone_number }}" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="user_balance">Баланс пользователя (руб.):</label>
+                        <input type="number" id="user_balance" name="user_balance" value="{{ user.user_balance }}" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="site_balance">Баланс на сайте (руб.):</label>
+                        <input type="number" id="site_balance" name="site_balance" value="{{ user.site_balance }}" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telegram_id">Telegram ID (только для чтения):</label>
+                    <input type="text" id="telegram_id" value="{{ user.telegram_id }}" readonly style="background: #e9ecef;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="unique_id">Уникальный ID (только для чтения):</label>
+                    <input type="text" id="unique_id" value="{{ user.unique_id }}" readonly style="background: #e9ecef;">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="goToProfile()">Отмена</button>
+                    <button type="submit" class="save-btn">💾 Сохранить изменения</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        function goToProfile() {
+            window.location.href = "{{ url_for('profile', user_id=admin_user.unique_id) }}";
+        }
+
+        function goToFullAdmin() {
+            window.location.href = "{{ url_for('admin_panel', user_id=admin_user.unique_id) }}";
+        }
+
+        function openSubscriptionsAdmin() {
+            window.location.href = "{{ url_for('admin_subscriptions', user_id=admin_user.unique_id) }}";
+        }
+
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('/update-user-data', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Данные пользователя успешно обновлены!');
+                    goToProfile();
+                } else {
+                    alert('❌ Ошибка при обновлении данных: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Ошибка при обновлении данных');
+            });
+        });
+    </script>
+</body>
+</html>
